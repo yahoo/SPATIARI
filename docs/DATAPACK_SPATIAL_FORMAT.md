@@ -1,6 +1,6 @@
 # Spatial `.dp` file format (R-Tree datapack)
 
-This document describes what is **inside a `.dp` file** produced or consumed by **`geoinformatics_lib_spatial_lookup`** (package `com.yahoo.geoinformatics.polygon_lookup`). The implementation lives mainly in `datastore/Storage.java`, `rtree/RTree.java`, and `spatial/SpatialIndexer.java`.
+This document describes what is **inside a `.dp` file** produced or consumed by **SPATIARI** (`com.yahoo.spatiari:spatiari`; Java package `com.yahoo.geoinformatics.polygon_lookup`). The implementation lives mainly in `datastore/Storage.java`, `rtree/RTree.java`, and `spatial/SpatialIndexer.java`.
 
 > **Scope:** This is the **polygon R-Tree** on-disk format used for `SpatialIndexer.buildIndexFromShapes` / `buildIndexFromTextFiles` → `RTree.storeIndex` and `Storage.loadFrom`.  
 > **Other** projects may also use the extension `.dp` for **unrelated** payloads (for example a single Java-serialized `int[]` for WOE cache in the reverse geocoder). Those files are **not** described here.

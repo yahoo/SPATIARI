@@ -26,29 +26,37 @@ mvn clean package
 
 CI runs `mvn verify` on every PR and `master` push (see `.github/workflows/ci.yml`).
 
-### Consuming the JAR (Yahoo internal — Path B)
+### Consuming the JAR (Yahoo internal)
 
-Until Maven Central is live, released JARs are still published to Yahoo Artifactory (`ugeo-releases`) under the historical coordinates:
+New coordinates (preferred). Published to Yahoo Artifactory `ugeo-releases` from the internal mirror `yahoo-platforms/location-spatiari` (Screwdriver, profile `-Pugeo-release`):
+
+```xml
+<dependency>
+  <groupId>com.yahoo.spatiari</groupId>
+  <artifactId>spatiari</artifactId>
+  <version>1.0.0</version> <!-- use latest released -->
+</dependency>
+```
+
+Legacy fallback (still built from GHES + SD 210636 until consumers cut over):
 
 ```xml
 <dependency>
   <groupId>com.yahoo.geoinformatics</groupId>
   <artifactId>geoinformatics_lib_spatial_lookup</artifactId>
-  <version>4.0.3</version> <!-- use latest released -->
+  <version>4.0.3</version>
 </dependency>
 ```
-
-Path B goal: Screwdriver builds **this** public repo and deploys the same GAV to `ugeo-releases` (profile `-Pugeo-release`). After that cutover, GHES can be archived.
 
 ### Roadmap
 
 | Phase | Status |
 |-------|--------|
 | Public source on `yahoo/SPATIARI` | Done |
-| GitHub Actions Maven CI | In progress |
-| Path B — build public → `ugeo-releases` (same GAV) | Next |
-| Path A — Maven Central | Planned |
-| Rename GAV → `com.yahoo.spatiari:spatiari` | Planned (after Central) |
+| GitHub Actions Maven CI | Done |
+| GAV → `com.yahoo.spatiari:spatiari` | This change |
+| Internal mirror + SD → `ugeo-releases` | Next ([LOCATION-14334](https://ouryahoo.atlassian.net/browse/LOCATION-14334)) |
+| Maven Central | Planned ([LOCATION-14335](https://ouryahoo.atlassian.net/browse/LOCATION-14335)) |
 
 ## Documentation
 
@@ -62,7 +70,7 @@ Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) and [NOTI
 
 ## Versioning
 
-Version is managed in `pom.xml`. Current line is `4.0.4-SNAPSHOT` (next release after Artifactory `4.0.3`).
+Version is managed in `pom.xml`. Current line under the new GAV is `1.0.0-SNAPSHOT`. Historical releases under `geoinformatics_lib_spatial_lookup` remain on the legacy line (through `4.0.3`).
 
 ## Known users
 

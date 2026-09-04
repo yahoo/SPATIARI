@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.yahoo.geoinformatics</groupId>
-	<artifactId>geoinformatics_lib_spatial_lookup</artifactId>
+	<groupId>com.yahoo.spatiari</groupId>
+	<artifactId>spatiari</artifactId>
 	<packaging>jar</packaging>
-	<version>4.0.4-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 
-	<name>geoinformatics_lib_spatial_lookup</name>
+	<name>spatiari</name>
 	<description>Offline R-Tree spatial indexing and fast runtime lookup for polygons and points (SPATIARI)</description>
 	<url>https://github.com/yahoo/SPATIARI</url>
 
@@ -51,11 +51,6 @@
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-shapefile</artifactId>
-			<version>24.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-swing</artifactId>
 			<version>24.0</version>
 		</dependency>
 	</dependencies>
@@ -170,9 +165,9 @@
 	</build>
 
 	<!--
-	  Path B (internal continuity): activate with -Pugeo-release on Screwdriver.
-	  Keeps Yahoo Artifactory deploy out of the default public build.
-	  Path A (Maven Central) + GAV rename to spatiari is a follow-up.
+	  Internal Artifactory deploy (yahoo-platforms/location-spatiari SD):
+	  activate with -Pugeo-release. Keeps Yahoo deploy out of the default public build.
+	  GAV is com.yahoo.spatiari:spatiari. Maven Central is LOCATION-14335.
 	  Wagon SSH for scpexe:// deploy is provided by the Yahoo Maven SD template.
 	-->
 	<profiles>
