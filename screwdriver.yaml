@@ -1,0 +1,64 @@
+version: 4
+shared:
+  environment:
+    JAVA_PUBLISH_MAIL_NOTIFICATION: false
+    PUB_BRANCH: test
+    CONTAINER: open-jdk8-latest
+    PUB_EXTRA_OPTIONS: -os all
+    BUILD_OS: "rhel7"
+    JDK_VERSION: "1.8"
+  annotations:
+    maven-build: &maven-build mvn install javadoc:aggregate clover:clean clover:setup clover:instrument clover:aggregate clover:clover clover:log clover:check -Dcheckstyle.skip=true -Pugeo-release
+    copy_artifacts: &copy_artifacts cp -r target/surefire-reports/TEST-TestSuite.xml  ${TEST_RESULTS_DIR}/TEST-TestSuite.xml; cp -r target/site/clover/* ${COVERAGE_DIR} ;
+    maven-clean: &maven-clean mvn clean
+    maven-prepare: &maven-prepare mvn -B release:clean release:prepare -DignoreSnapshots -Dresume=false -Dscrewdriver3 -Djava.awt.headless=true -Dyahoo.jdk.version=${JDK_TARGET_VERSION} -Dyjava.container=${CONTAINER} -Pugeo-release
+  settings:
+    email: geoinformatics@yahooinc.com
+
+jobs:
+  pull-request:
+    template: java-platform/maven-open-jdk-devel@latest
+    image: jdk17-el8
+    requires:
+      - ~pr
+    steps:
+      - maven-clean: *maven-clean
+      - mvn-build: *maven-build
+      - postpackage: echo "avoiding *copy_artifacts for now"
+      - publish: echo "NOT publishing for PR build"
+
+  validate-semgrep:
+    requires: [ ~pr, ~commit ]
+    template: ProdSec/validate_semgrep@stable
+    image: alma8
+    environment:
+      YAHOO_SEMGREP_ENFORCING: False
+      YAHOO_SEMGREP_ONLINE: True
+      SEMGREP_LOGLEVEL: debug
+
+  validate-checkov:
+    requires: [~pr, ~commit]
+    image: docker.ouroath.com:4443/ylinux/ylinux7:7-latest
+    steps:
+      - run: |
+          sd-cmd exec ProdSec/checkov@stable -d $SD_SOURCE_DIR
+
+  component:
+    settings:
+      email: geoinformatics@yahooinc.com
+    template: java-platform/maven-open-jdk-devel@latest
+    image: jdk17-el8
+    requires:
+      - ~commit
+    steps:
+      - maven-clean: *maven-clean
+      - mvn-build: *maven-build
+      - postpackage: echo "avoiding *copy_artifacts for now"
+
+  release:
+    template: java-platform/maven-open-jdk-devel@latest
+    image: jdk17-el8
+    steps:
+      - maven-clean: *maven-clean
+      - mvn-build: echo "skip mvn-build"
+      - publish: echo "NOT publishing to dist"

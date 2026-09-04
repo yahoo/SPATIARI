@@ -24,6 +24,32 @@ Also known internally as `geoinformatics_lib_spatial_lookup`.
 mvn clean package
 ```
 
+CI runs `mvn verify` on every PR and `master` push (see `.github/workflows/ci.yml`).
+
+### Consuming the JAR (Yahoo internal — Path B)
+
+Until Maven Central is live, released JARs are still published to Yahoo Artifactory (`ugeo-releases`) under the historical coordinates:
+
+```xml
+<dependency>
+  <groupId>com.yahoo.geoinformatics</groupId>
+  <artifactId>geoinformatics_lib_spatial_lookup</artifactId>
+  <version>4.0.3</version> <!-- use latest released -->
+</dependency>
+```
+
+Path B goal: Screwdriver builds **this** public repo and deploys the same GAV to `ugeo-releases` (profile `-Pugeo-release`). After that cutover, GHES can be archived.
+
+### Roadmap
+
+| Phase | Status |
+|-------|--------|
+| Public source on `yahoo/SPATIARI` | Done |
+| GitHub Actions Maven CI | In progress |
+| Path B — build public → `ugeo-releases` (same GAV) | Next |
+| Path A — Maven Central | Planned |
+| Rename GAV → `com.yahoo.spatiari:spatiari` | Planned (after Central) |
+
 ## Documentation
 
 - **[Spatial `.dp` file format (R-Tree datapack)](docs/DATAPACK_SPATIAL_FORMAT.md)** — binary layout for language-neutral vs Java-serialized encodings, header fields, R-Tree node and polygon record layout, and relationship to `Storage` / `SpatialIndexer`.
@@ -36,7 +62,7 @@ Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) and [NOTI
 
 ## Versioning
 
-Version is managed in `pom.xml`.
+Version is managed in `pom.xml`. Current line is `4.0.4-SNAPSHOT` (next release after Artifactory `4.0.3`).
 
 ## Known users
 

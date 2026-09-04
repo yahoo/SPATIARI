@@ -4,7 +4,7 @@
 	<groupId>com.yahoo.geoinformatics</groupId>
 	<artifactId>geoinformatics_lib_spatial_lookup</artifactId>
 	<packaging>jar</packaging>
-	<version>4.0.3-SNAPSHOT</version>
+	<version>4.0.4-SNAPSHOT</version>
 
 	<name>geoinformatics_lib_spatial_lookup</name>
 	<description>Offline R-Tree spatial indexing and fast runtime lookup for polygons and points (SPATIARI)</description>
@@ -168,4 +168,36 @@
              </plugin>
 		</plugins>
 	</build>
+
+	<!--
+	  Path B (internal continuity): activate with -Pugeo-release on Screwdriver.
+	  Keeps Yahoo Artifactory deploy out of the default public build.
+	  Path A (Maven Central) + GAV rename to spatiari is a follow-up.
+	-->
+	<profiles>
+		<profile>
+			<id>ugeo-release</id>
+			<build>
+				<extensions>
+					<extension>
+						<groupId>org.apache.maven.wagon</groupId>
+						<artifactId>wagon-ssh-external</artifactId>
+						<version>1.0-beta-6</version>
+					</extension>
+				</extensions>
+			</build>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>artifactory.ops.yahoo.com-snapshots</id>
+					<name>artifactory.ops.yahoo.com-snapshots</name>
+					<url>scpexe://artifactory-ssh-proxy.corp.yahoo.com:4443/ugeo-snapshot/</url>
+				</snapshotRepository>
+				<repository>
+					<id>artifactory.ops.yahoo.com-releases</id>
+					<name>artifactory.ops.yahoo.com-releases</name>
+					<url>scpexe://artifactory-ssh-proxy.corp.yahoo.com:4443/ugeo-releases/</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+	</profiles>
 </project>
