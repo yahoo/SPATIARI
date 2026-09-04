@@ -56,7 +56,7 @@
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-swing</artifactId>
-			<version>24.0</version>
+			<version>35.1</version>
 		</dependency>
 	</dependencies>
 	<repositories>
