@@ -173,19 +173,11 @@
 	  Path B (internal continuity): activate with -Pugeo-release on Screwdriver.
 	  Keeps Yahoo Artifactory deploy out of the default public build.
 	  Path A (Maven Central) + GAV rename to spatiari is a follow-up.
+	  Wagon SSH for scpexe:// deploy is provided by the Yahoo Maven SD template.
 	-->
 	<profiles>
 		<profile>
 			<id>ugeo-release</id>
-			<build>
-				<extensions>
-					<extension>
-						<groupId>org.apache.maven.wagon</groupId>
-						<artifactId>wagon-ssh-external</artifactId>
-						<version>1.0-beta-6</version>
-					</extension>
-				</extensions>
-			</build>
 			<distributionManagement>
 				<snapshotRepository>
 					<id>artifactory.ops.yahoo.com-snapshots</id>
