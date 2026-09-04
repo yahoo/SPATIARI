@@ -1,0 +1,28 @@
+=========================================================================
+==  NOTICE file corresponding to the section 4 d of the Apache License, ==
+==  Version 2.0, in this case for SPATIARI.                             ==
+=========================================================================
+
+SPATIARI
+Copyright 2015-2026 Yahoo Inc.
+
+This product includes software developed by Yahoo Inc (https://yahooinc.com).
+
+=========================================================================
+Third-Party Software Attributions
+=========================================================================
+
+This product includes or depends on the GeoTools library:
+GeoTools - The Open Source Java GIS Toolkit (https://geotools.org/)
+Copyright (c) 2002-2026, Open Source Geospatial Foundation (OSGeo).
+Licensed under the GNU Lesser General Public License (LGPL), Version 2.1.
+
+Certain modules within the GeoTools library are used under the Apache
+License 2.0:
+- gt-xsd-core
+- gt-brewer
+Copyright (c) 2002-2026, Open Source Geospatial Foundation (OSGeo).
+
+This product uses geometry libraries that implement algorithms from the
+GEOS library (https://libgeos.org/).
+GEOS is available under the GNU Lesser General Public License (LGPL).
