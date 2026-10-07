@@ -26,37 +26,41 @@ mvn clean package
 
 CI runs `mvn verify` on every PR and `master` push (see `.github/workflows/ci.yml`).
 
-### Consuming the JAR (Yahoo internal)
+## Installation
 
-New coordinates (preferred). Published to Yahoo Artifactory `ugeo-releases` from the internal mirror `yahoo-platforms/location-spatiari` (Screwdriver, profile `-Pugeo-release`):
+SPATIARI is published to [Maven Central](https://central.sonatype.com/artifact/com.yahoo.spatiari/spatiari):
 
 ```xml
 <dependency>
   <groupId>com.yahoo.spatiari</groupId>
   <artifactId>spatiari</artifactId>
-  <version>1.0.0</version> <!-- use latest released -->
+  <version>1.0.0</version> <!-- use the latest release -->
 </dependency>
 ```
 
-Legacy fallback (still built from GHES + SD 210636 until consumers cut over):
+SPATIARI depends on [GeoTools](https://geotools.org/) (`gt-shapefile`), which is not on Maven Central. Add the OSGeo repository to your build:
 
 ```xml
-<dependency>
-  <groupId>com.yahoo.geoinformatics</groupId>
-  <artifactId>geoinformatics_lib_spatial_lookup</artifactId>
-  <version>4.0.3</version>
-</dependency>
+<repositories>
+  <repository>
+    <id>osgeo</id>
+    <name>OSGeo Release Repository</name>
+    <url>https://repo.osgeo.org/repository/release/</url>
+  </repository>
+</repositories>
 ```
 
-### Roadmap
+Releases before 1.0.0 were published under the coordinates `com.yahoo.geoinformatics:geoinformatics_lib_spatial_lookup` (through `4.0.3`).
 
-| Phase | Status |
-|-------|--------|
-| Public source on `yahoo/SPATIARI` | Done |
-| GitHub Actions Maven CI | Done |
-| GAV → `com.yahoo.spatiari:spatiari` | This change |
-| Internal mirror + SD → `ugeo-releases` | Next ([LOCATION-14334](https://ouryahoo.atlassian.net/browse/LOCATION-14334)) |
-| Maven Central | Planned ([LOCATION-14335](https://ouryahoo.atlassian.net/browse/LOCATION-14335)) |
+## Releasing
+
+Releases are cut from `master` by pushing a tag. Version numbers come from the tag; nothing is committed back to `master`.
+
+1. Make sure `master` CI is green.
+2. Tag and push: `git tag v1.0.0 && git push origin v1.0.0`
+3. [`release.yml`](.github/workflows/release.yml) builds, GPG-signs and publishes `com.yahoo.spatiari:spatiari:1.0.0` to Maven Central, then creates the GitHub Release with generated notes.
+
+Publishing needs these secrets in the `maven-central` environment: `MAVEN_CENTRAL_USERNAME` and `MAVEN_CENTRAL_PASSWORD` (a Sonatype Central Portal user token), plus `MAVEN_GPG_PRIVATE_KEY` and `MAVEN_GPG_PASSPHRASE`.
 
 ## Documentation
 
@@ -70,7 +74,7 @@ Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) and [NOTI
 
 ## Versioning
 
-Version is managed in `pom.xml`. Current line under the new GAV is `1.0.0-SNAPSHOT`. Historical releases under `geoinformatics_lib_spatial_lookup` remain on the legacy line (through `4.0.3`).
+SPATIARI follows [Semantic Versioning](https://semver.org/). Release versions come from `vX.Y.Z` tags (see [Releasing](#releasing)). `pom.xml` on `master` carries the upcoming `-SNAPSHOT` version. Historical releases under `geoinformatics_lib_spatial_lookup` remain on the legacy line (through `4.0.3`).
 
 ## Known users
 
@@ -99,4 +103,6 @@ See git history for the full changelog.
 
 ## CI
 
-GitHub Actions CodeQL runs on `master` and pull requests (see `.github/workflows/codeql.yml`).
+- `ci.yml`: Maven verify on pull requests and `master`
+- `codeql.yml`: CodeQL analysis on pull requests, `master` and weekly
+- `release.yml`: Maven Central and GitHub Release on `vX.Y.Z` tags
