@@ -60,7 +60,7 @@ Releases are cut from `master` by pushing a tag. Version numbers come from the t
 2. Tag and push: `git tag v1.0.0 && git push origin v1.0.0`
 3. [`release.yml`](.github/workflows/release.yml) builds, GPG-signs and publishes `com.yahoo.spatiari:spatiari:1.0.0` to Maven Central, then creates the GitHub Release with generated notes.
 
-Publishing needs these secrets in the `maven-central` environment: `MAVEN_CENTRAL_USERNAME` and `MAVEN_CENTRAL_PASSWORD` (a Sonatype Central Portal user token), plus `MAVEN_GPG_PRIVATE_KEY` and `MAVEN_GPG_PASSPHRASE`.
+Publishing needs these repository Actions secrets: `MAVEN_CENTRAL_USERNAME` and `MAVEN_CENTRAL_PASSWORD` (a Sonatype Central Portal user token), plus `MAVEN_GPG_PRIVATE_KEY` and `MAVEN_GPG_PASSPHRASE`.
 
 ## Documentation
 

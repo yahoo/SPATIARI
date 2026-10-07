@@ -19,7 +19,6 @@ jobs:
   publish:
     name: Publish to Maven Central
     runs-on: ubuntu-latest
-    environment: maven-central
     permissions:
       contents: write # create the GitHub Release
     steps:
@@ -54,7 +53,7 @@ jobs:
           [ -n "$GPG_KEY" ] || missing="$missing MAVEN_GPG_PRIVATE_KEY"
           [ -n "$GPG_PASSPHRASE" ] || missing="$missing MAVEN_GPG_PASSPHRASE"
           if [ -n "$missing" ]; then
-            echo "::error::Missing secrets in environment maven-central:$missing"; exit 1
+            echo "::error::Missing repository secrets:$missing"; exit 1
           fi
 
       - name: Set up JDK 8
