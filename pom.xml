@@ -18,6 +18,14 @@
 		</license>
 	</licenses>
 
+	<developers>
+		<developer>
+			<name>Yahoo Location Platforms</name>
+			<organization>Yahoo</organization>
+			<organizationUrl>https://www.yahooinc.com</organizationUrl>
+		</developer>
+	</developers>
+
 	<scm>
 		<connection>scm:git:https://github.com/yahoo/SPATIARI.git</connection>
 		<developerConnection>scm:git:https://github.com/yahoo/SPATIARI.git</developerConnection>
@@ -165,26 +173,48 @@
 	</build>
 
 	<!--
-	  Internal Artifactory deploy (yahoo-platforms/location-spatiari SD):
-	  activate with -Pugeo-release. Keeps Yahoo deploy out of the default public build.
-	  GAV is com.yahoo.spatiari:spatiari. Maven Central is LOCATION-14335.
-	  Wagon SSH for scpexe:// deploy is provided by the Yahoo Maven SD template.
+	  Maven Central release: activate with -Pcentral (see .github/workflows/release.yml).
+	  Signs all artifacts with GPG (passphrase from MAVEN_GPG_PASSPHRASE) and uploads
+	  via the Sonatype Central Portal using server id "central" in settings.xml.
 	-->
 	<profiles>
 		<profile>
-			<id>ugeo-release</id>
-			<distributionManagement>
-				<snapshotRepository>
-					<id>artifactory.ops.yahoo.com-snapshots</id>
-					<name>artifactory.ops.yahoo.com-snapshots</name>
-					<url>scpexe://artifactory-ssh-proxy.corp.yahoo.com:4443/ugeo-snapshot/</url>
-				</snapshotRepository>
-				<repository>
-					<id>artifactory.ops.yahoo.com-releases</id>
-					<name>artifactory.ops.yahoo.com-releases</name>
-					<url>scpexe://artifactory-ssh-proxy.corp.yahoo.com:4443/ugeo-releases/</url>
-				</repository>
-			</distributionManagement>
+			<id>central</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>3.2.8</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+								<configuration>
+									<gpgArguments>
+										<arg>--pinentry-mode</arg>
+										<arg>loopback</arg>
+									</gpgArguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.sonatype.central</groupId>
+						<artifactId>central-publishing-maven-plugin</artifactId>
+						<version>0.11.0</version>
+						<extensions>true</extensions>
+						<configuration>
+							<publishingServerId>central</publishingServerId>
+							<autoPublish>true</autoPublish>
+							<waitUntil>published</waitUntil>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 </project>
