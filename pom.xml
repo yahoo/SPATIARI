@@ -38,6 +38,8 @@
         <enforcer.skip>true</enforcer.skip>
 		<project-info-reports.skip>true</project-info-reports.skip>
         <maven-jar-plugin-version>3.5.1</maven-jar-plugin-version>
+        <!-- reproducible builds; release.yml overrides this with the tagged commit time -->
+        <project.build.outputTimestamp>2026-01-01T00:00:00Z</project.build.outputTimestamp>
         <!-- the default testnames to execute check suite.xml -->
         <testnames>default</testnames>
         <!-- publish to dist only -->
@@ -128,6 +130,8 @@
                         <configuration>
                             <source>8</source>
                             <finalName>${project.artifactId}</finalName>
+                            <!-- no generation date in the HTML, for reproducible builds -->
+                            <notimestamp>true</notimestamp>
                         </configuration>
                     </execution>
                 </executions>
@@ -157,7 +161,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.2</version>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
