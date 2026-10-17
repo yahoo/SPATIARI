@@ -8,3 +8,7 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # TestNG 7.6+ needs Java 11; SPATIARI builds and targets JDK 8
+      - dependency-name: org.testng:testng
+        versions: [">=7.6.0"]
