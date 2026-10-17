@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-shapefile</artifactId>
-			<version>24.0</version>
+			<version>35.1</version>
 		</dependency>
 	</dependencies>
 	<repositories>
