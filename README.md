@@ -28,9 +28,16 @@ CI runs `mvn verify` on every PR and `master` push (see `.github/workflows/ci.ym
 
 ## Installation
 
-SPATIARI is published to [Maven Central](https://central.sonatype.com/artifact/com.yahoo.spatiari/spatiari):
+Releases are published to [GitHub Packages](https://github.com/yahoo/SPATIARI/packages) and attached as jars to each [GitHub Release](https://github.com/yahoo/SPATIARI/releases). Maven Central publishing is planned. GitHub Packages needs a GitHub token with `read:packages` even for public packages; see [Working with the Apache Maven registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry).
 
 ```xml
+<repositories>
+  <repository>
+    <id>github-spatiari</id>
+    <url>https://maven.pkg.github.com/yahoo/SPATIARI</url>
+  </repository>
+</repositories>
+
 <dependency>
   <groupId>com.yahoo.spatiari</groupId>
   <artifactId>spatiari</artifactId>
@@ -58,9 +65,11 @@ Releases are cut from `master` by pushing a tag. Version numbers come from the t
 
 1. Make sure `master` CI is green.
 2. Tag and push: `git tag v1.0.0 && git push origin v1.0.0`
-3. [`release.yml`](.github/workflows/release.yml) builds, GPG-signs and publishes `com.yahoo.spatiari:spatiari:1.0.0` to Maven Central, then creates the GitHub Release with generated notes.
+3. [`release.yml`](.github/workflows/release.yml) builds, GPG-signs and publishes `com.yahoo.spatiari:spatiari:1.0.0` to GitHub Packages, then creates the GitHub Release with generated notes. When the repository variable `PUBLISH_TO_CENTRAL` is `true`, it also publishes to Maven Central.
 
-Publishing needs these repository Actions secrets: `MAVEN_CENTRAL_USERNAME` and `MAVEN_CENTRAL_PASSWORD` (a Sonatype Central Portal user token), plus `MAVEN_GPG_PRIVATE_KEY` and `MAVEN_GPG_PASSPHRASE`.
+Publishing needs the repository Actions secrets `MAVEN_GPG_PRIVATE_KEY` and `MAVEN_GPG_PASSPHRASE`. Maven Central also needs `MAVEN_CENTRAL_USERNAME` and `MAVEN_CENTRAL_PASSWORD` (a Sonatype Central Portal user token). GitHub Packages uses the workflow's `GITHUB_TOKEN`.
+
+The fat `jar-with-dependencies` is still built by `mvn package` but is not deployed.
 
 ## Documentation
 
@@ -105,4 +114,4 @@ See git history for the full changelog.
 
 - `ci.yml`: Maven verify on pull requests and `master`
 - `codeql.yml`: CodeQL analysis on pull requests, `master` and weekly
-- `release.yml`: Maven Central and GitHub Release on `vX.Y.Z` tags
+- `release.yml`: GitHub Packages (and optionally Maven Central) and GitHub Release on `vX.Y.Z` tags
